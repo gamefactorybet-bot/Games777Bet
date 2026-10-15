@@ -10,7 +10,7 @@ const raiz = dirname(fileURLToPath(import.meta.url));
 /**
  * Lee el .env sin depender de dotenv.
  * Las variables sin prefijo VITE_ (como SUPABASE_SERVICE_ROLE_KEY o
- * WIN777_PROVEEDOR_SECRETO) no las expone Vite al cliente, así que las
+ * PROVEEDOR_SECRETO) no las expone Vite al cliente, así que las
  * cargamos a process.env para que las funciones de /api las vean igual
  * que en Vercel.
  */
@@ -52,14 +52,14 @@ function ruteoCaras(req, res, next) {
     res.end();
     return true;
   }
-  if (cara === 'estudio' && /^\/jugar(\.html)?\/?$/.test(soloRuta)) {
+  if (cara === 'estudio' && /^\/jugar(\.html)?(\/[^/]+)?\/?$/.test(soloRuta)) {
     res.statusCode = 302;
     res.setHeader('Location', '/estudio');
     res.end();
     return true;
   }
 
-  if (soloRuta === '/jugar' || soloRuta === '/jugar/') {
+  if (soloRuta === '/jugar' || soloRuta === '/jugar/' || /^\/jugar\/[^/]+\/?$/.test(soloRuta)) {
     req.url = '/jugar.html' + query;
     next();
     return true;
